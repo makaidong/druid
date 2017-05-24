@@ -87,6 +87,10 @@ public class MySqlSelectParser extends SQLSelectParser {
 
         MySqlSelectQueryBlock queryBlock = new MySqlSelectQueryBlock();
 
+        if (lexer.hasComment() && lexer.isKeepComments()) {
+            queryBlock.addBeforeComment(lexer.readAndResetComments());
+        }
+
         if (lexer.token() == Token.SELECT) {
             lexer.nextToken();
 
@@ -368,6 +372,38 @@ public class MySqlSelectParser extends SQLSelectParser {
                 queryBlock.setInto(this.exprParser.name());
             }
         }
+    }
+
+    protected SQLTableSource primaryTableSourceRest(SQLTableSource tableSource) {
+        if (lexer.token() == Token.USE) {
+            lexer.nextToken();
+            MySqlUseIndexHint hint = new MySqlUseIndexHint();
+            parseIndexHint(hint);
+            tableSource.getHints().add(hint);
+        }
+
+        if (identifierEquals("IGNORE")) {
+            lexer.nextToken();
+            MySqlIgnoreIndexHint hint = new MySqlIgnoreIndexHint();
+            parseIndexHint(hint);
+            tableSource.getHints().add(hint);
+        }
+
+        if (identifierEquals("FORCE")) {
+            lexer.nextToken();
+            MySqlForceIndexHint hint = new MySqlForceIndexHint();
+            parseIndexHint(hint);
+            tableSource.getHints().add(hint);
+        }
+
+        if (lexer.token() == Token.PARTITION) {
+            lexer.nextToken();
+            accept(Token.LPAREN);
+            this.exprParser.names(((SQLExprTableSource) tableSource).getPartitions(), tableSource);
+            accept(Token.RPAREN);
+        }
+
+        return tableSource;
     }
 
     protected SQLTableSource parseTableSourceRest(SQLTableSource tableSource) {

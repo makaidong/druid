@@ -40,6 +40,7 @@ public class OracleLexer extends Lexer {
         map.put("COMMENT", Token.COMMENT);
         map.put("COMMIT", Token.COMMIT);
         map.put("CONNECT", Token.CONNECT);
+        map.put("CONTINUE", Token.CONTINUE);
 
         map.put("CROSS", Token.CROSS);
         map.put("CURSOR", Token.CURSOR);
@@ -51,6 +52,7 @@ public class OracleLexer extends Lexer {
         map.put("EXTRACT", Token.EXTRACT);
         map.put("GOTO", Token.GOTO);
         map.put("IF", Token.IF);
+        map.put("ELSIF", Token.ELSIF);
 
         map.put("LIMIT", Token.LIMIT);
         map.put("LOOP", Token.LOOP);
@@ -64,6 +66,7 @@ public class OracleLexer extends Lexer {
         map.put("PRIOR", Token.PRIOR);
 
         map.put("REJECT", Token.REJECT);
+        map.put("RETURN", Token.RETURN);
         map.put("RETURNING", Token.RETURNING);
         map.put("SAVEPOINT", Token.SAVEPOINT);
         map.put("SESSION", Token.SESSION);
@@ -94,7 +97,6 @@ public class OracleLexer extends Lexer {
         map.put("PCTINCREASE", Token.PCTINCREASE);
         map.put("FLASH_CACHE", Token.FLASH_CACHE);
         map.put("CELL_FLASH_CACHE", Token.CELL_FLASH_CACHE);
-        map.put("KEEP", Token.KEEP);
         map.put("NONE", Token.NONE);
         map.put("LOB", Token.LOB);
         map.put("STORE", Token.STORE);
@@ -110,6 +112,8 @@ public class OracleLexer extends Lexer {
         map.put("INITIALLY", Token.INITIALLY);
 
         map.put("FETCH", Token.FETCH);
+        map.put("TABLESPACE", Token.TABLESPACE);
+        map.put("PARTITION", Token.PARTITION);
 
         DEFAULT_ORACLE_KEYWORDS = new Keywords(map);
     }
@@ -214,7 +218,7 @@ public class OracleLexer extends Lexer {
                 bufPos++;
             }
 
-            for (;;) {
+            for (;!isEOF();) {
                 if (ch == '*' && charAt(pos + 1) == '/') {
                     bufPos += 2;
                     scanChar();

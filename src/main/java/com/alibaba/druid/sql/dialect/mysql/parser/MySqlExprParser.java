@@ -73,6 +73,11 @@ public class MySqlExprParser extends SQLExprParser {
         this.lexer.nextToken();
     }
 
+    public MySqlExprParser(String sql, boolean keepComments){
+        this(new MySqlLexer(sql, true, keepComments));
+        this.lexer.nextToken();
+    }
+
     public SQLExpr relationalRest(SQLExpr expr) {
         if (identifierEquals("REGEXP")) {
             lexer.nextToken();
@@ -949,7 +954,7 @@ public class MySqlExprParser extends SQLExprParser {
                     lexer.nextToken();
                 }
                 SQLName tableSpace = this.name();
-                partitionDef.setTableSpace(tableSpace);
+                partitionDef.setTablespace(tableSpace);
             } else if (lexer.token() == Token.INDEX) {
                 lexer.nextToken();
                 acceptIdentifier("DIRECTORY");

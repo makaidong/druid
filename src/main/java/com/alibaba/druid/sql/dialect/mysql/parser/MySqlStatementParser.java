@@ -93,14 +93,12 @@ import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlCursorDeclareStatemen
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlDeclareConditionStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlDeclareHandlerStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlDeclareStatement;
-import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlExplainType;
-import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlFormatName;
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlHandlerType;
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlIterateStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlLeaveStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlRepeatStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlSelectIntoStatement;
-import com.alibaba.druid.sql.dialect.mysql.ast.clause.MySqlWhileStatement;
+import com.alibaba.druid.sql.ast.statement.SQLWhileStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.CobarShowStatus;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlAlterTableAlterColumn;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlAlterTableChangeColumn;
@@ -229,6 +227,10 @@ public class MySqlStatementParser extends SQLStatementParser {
 
     public MySqlStatementParser(String sql) {
         super(new MySqlExprParser(sql));
+    }
+
+    public MySqlStatementParser(String sql, boolean keepComments) {
+        super(new MySqlExprParser(sql, keepComments));
     }
 
     public MySqlStatementParser(Lexer lexer) {
@@ -3194,6 +3196,7 @@ public class MySqlStatementParser extends SQLStatementParser {
          * CREATE OR REPALCE PROCEDURE SP_NAME(parameter_list) BEGIN block_statement END
          */
         SQLCreateProcedureStatement stmt = new SQLCreateProcedureStatement();
+        stmt.setDbType(dbType);
 
         if (lexer.token() != Token.PROCEDURE) {
             if (identifierEquals("DEFINER")) {
@@ -3445,26 +3448,8 @@ public class MySqlStatementParser extends SQLStatementParser {
 
             // declare statement
             if (lexer.token() == Token.DECLARE) {
-                char markChar = lexer.current();
-                int markBp = lexer.bp();
-                lexer.nextToken();
-                lexer.nextToken();
-                if (lexer.token() == Token.CURSOR)// cursor declare statement
-                {
-                    lexer.reset(markBp, markChar, Token.DECLARE);
-                    statementList.add(this.parseCursorDeclare());
-                } else if (identifierEquals("HANDLER")) {
-                    //DECLARE异常处理程序 [add by zhujun 2016-04-16]
-                    lexer.reset(markBp, markChar, Token.DECLARE);
-                    statementList.add(this.parseDeclareHandler());
-                } else if (lexer.token() == Token.CONDITION) {
-                    //DECLARE异常 [add by zhujun 2016-04-17]
-                    lexer.reset(markBp, markChar, Token.DECLARE);
-                    statementList.add(this.parseDeclareCondition());
-                } else {
-                    lexer.reset(markBp, markChar, Token.DECLARE);
-                    statementList.add(this.parseDeclare());
-                }
+                SQLStatement stmt = this.parseDeclare();
+                statementList.add(stmt);
                 continue;
             }
 
@@ -3585,9 +3570,9 @@ public class MySqlStatementParser extends SQLStatementParser {
      *
      * @return MySqlWhileStatement
      */
-    public MySqlWhileStatement parseWhile() {
+    public SQLWhileStatement parseWhile() {
         accept(Token.WHILE);
-        MySqlWhileStatement stmt = new MySqlWhileStatement();
+        SQLWhileStatement stmt = new SQLWhileStatement();
 
         stmt.setCondition(this.exprParser.expr());
 
@@ -3610,10 +3595,10 @@ public class MySqlStatementParser extends SQLStatementParser {
      *
      * @return MySqlWhileStatement
      */
-    public MySqlWhileStatement parseWhile(String label) {
+    public SQLWhileStatement parseWhile(String label) {
         accept(Token.WHILE);
 
-        MySqlWhileStatement stmt = new MySqlWhileStatement();
+        SQLWhileStatement stmt = new SQLWhileStatement();
 
         stmt.setLabelName(label);
 
@@ -3701,7 +3686,33 @@ public class MySqlStatementParser extends SQLStatementParser {
     /**
      * parse declare statement
      */
-    public MySqlDeclareStatement parseDeclare() {
+    public SQLStatement parseDeclare() {
+        char markChar = lexer.current();
+        int markBp = lexer.bp();
+
+        lexer.nextToken();
+
+        if (lexer.token() == Token.CONTINUE) {
+            lexer.reset(markBp, markChar, Token.DECLARE);
+            return this.parseDeclareHandler();
+        }
+
+        lexer.nextToken();
+        if (lexer.token() == Token.CURSOR) {
+            lexer.reset(markBp, markChar, Token.DECLARE);
+            return this.parseCursorDeclare();
+        } else if (identifierEquals("HANDLER")) {
+            //DECLARE异常处理程序 [add by zhujun 2016-04-16]
+            lexer.reset(markBp, markChar, Token.DECLARE);
+            return this.parseDeclareHandler();
+        } else if (lexer.token() == Token.CONDITION) {
+            //DECLARE异常 [add by zhujun 2016-04-17]
+            lexer.reset(markBp, markChar, Token.DECLARE);
+            return this.parseDeclareCondition();
+        } else {
+            lexer.reset(markBp, markChar, Token.DECLARE);
+        }
+
         MySqlDeclareStatement stmt = new MySqlDeclareStatement();
         accept(Token.DECLARE);
         // lexer.nextToken();
@@ -3772,7 +3783,9 @@ public class MySqlStatementParser extends SQLStatementParser {
         parseProcedureStatementList(loopStmt.getStatements());
         accept(Token.END);
         accept(Token.LOOP);
-        acceptIdentifier(label);
+        if (lexer.token() != Token.SEMI) {
+            acceptIdentifier(label);
+        }
         accept(Token.SEMI);
         return loopStmt;
     }
@@ -3962,7 +3975,7 @@ public class MySqlStatementParser extends SQLStatementParser {
 
             if (tokenName.equalsIgnoreCase("NOT")) {//for 'NOT FOUND'
                 lexer.nextToken();
-                acceptIdentifier("HANDLE");
+                acceptIdentifier("FOUND");
                 condition.setType(ConditionType.SYSTEM);
                 condition.setValue("NOT FOUND");
 
