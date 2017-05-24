@@ -18,13 +18,9 @@ package com.alibaba.druid.sql.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alibaba.druid.sql.dialect.oracle.ast.OracleSegmentAttributes;
-import com.alibaba.druid.sql.dialect.oracle.ast.OracleSegmentAttributesImpl;
-import com.alibaba.druid.sql.dialect.oracle.ast.clause.OracleLobStorageClause;
-import com.alibaba.druid.sql.dialect.oracle.ast.clause.OracleStorageClause;
 import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 
-public class SQLPartition extends OracleSegmentAttributesImpl implements OracleSegmentAttributes {
+public class SQLPartition extends SQLObjectImpl {
 
     protected SQLName               name;
 
@@ -37,16 +33,11 @@ public class SQLPartition extends OracleSegmentAttributesImpl implements OracleS
     // for mysql
     protected SQLExpr           dataDirectory;
     protected SQLExpr           indexDirectory;
+    protected SQLName           tableSpace;
     protected SQLExpr           maxRows;
     protected SQLExpr           minRows;
     protected SQLExpr           engine;
     protected SQLExpr           comment;
-
-    // for oracle
-    protected boolean segmentCreationImmediate;
-    protected boolean segmentCreationDeferred;
-
-    private SQLObject lobStorage;
 
 
     public SQLName getName() {
@@ -115,6 +106,19 @@ public class SQLPartition extends OracleSegmentAttributesImpl implements OracleS
         this.dataDirectory = dataDirectory;
     }
 
+ 
+
+    public SQLName getTableSpace() {
+        return tableSpace;
+    }
+
+    public void setTableSpace(SQLName tableSpace) {
+        if (tableSpace != null) {
+            tableSpace.setParent(this);
+        }
+        this.tableSpace = tableSpace;
+    }
+
     public SQLExpr getMaxRows() {
         return maxRows;
     }
@@ -165,41 +169,12 @@ public class SQLPartition extends OracleSegmentAttributesImpl implements OracleS
             acceptChild(visitor, values);
             acceptChild(visitor, dataDirectory);
             acceptChild(visitor, indexDirectory);
-            acceptChild(visitor, tablespace);
+            acceptChild(visitor, tableSpace);
             acceptChild(visitor, maxRows);
             acceptChild(visitor, minRows);
             acceptChild(visitor, engine);
             acceptChild(visitor, comment);
-
-            acceptChild(visitor, storage);
         }
         visitor.endVisit(this);
-    }
-
-    public SQLObject getLobStorage() {
-        return lobStorage;
-    }
-
-    public void setLobStorage(SQLObject lobStorage) {
-        if (lobStorage != null) {
-            lobStorage.setParent(this);
-        }
-        this.lobStorage = lobStorage;
-    }
-
-    public boolean isSegmentCreationImmediate() {
-        return segmentCreationImmediate;
-    }
-
-    public void setSegmentCreationImmediate(boolean segmentCreationImmediate) {
-        this.segmentCreationImmediate = segmentCreationImmediate;
-    }
-
-    public boolean isSegmentCreationDeferred() {
-        return segmentCreationDeferred;
-    }
-
-    public void setSegmentCreationDeferred(boolean segmentCreationDeferred) {
-        this.segmentCreationDeferred = segmentCreationDeferred;
     }
 }

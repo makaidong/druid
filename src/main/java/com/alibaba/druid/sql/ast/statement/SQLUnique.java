@@ -19,12 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
-import com.alibaba.druid.sql.ast.SQLName;
 import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 
 public class SQLUnique extends SQLConstraintImpl implements SQLUniqueConstraint, SQLTableElement {
 
-    protected final List<SQLExpr> columns = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> columns = new ArrayList<SQLExpr>();
 
     public SQLUnique(){
 
@@ -50,12 +49,4 @@ public class SQLUnique extends SQLConstraintImpl implements SQLUniqueConstraint,
         visitor.endVisit(this);
     }
 
-    public void cloneTo(SQLUnique x) {
-        super.cloneTo(x);
-
-        for (SQLExpr column : columns) {
-            SQLExpr columnClone = column.clone();
-            x.addColumn(columnClone);
-        }
-    }
 }

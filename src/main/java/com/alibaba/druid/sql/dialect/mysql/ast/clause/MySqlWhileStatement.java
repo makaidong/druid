@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.druid.sql.ast.statement;
+package com.alibaba.druid.sql.dialect.mysql.ast.clause;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.ast.SQLStatementImpl;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlStatementImpl;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlASTVisitor;
-import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 
 /**
  * 
  * @author zz [455910092@qq.com]
  */
-public class SQLWhileStatement extends SQLStatementImpl {
+public class MySqlWhileStatement extends MySqlStatementImpl {
 	
 	//while expr
 	private SQLExpr            condition;
@@ -46,7 +44,8 @@ public class SQLWhileStatement extends SQLStatementImpl {
 		this.labelName = labelName;
 	}
 
-    public void accept0(SQLASTVisitor visitor) {
+	@Override
+    public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
         	acceptChild(visitor, condition);
             acceptChild(visitor, statements);

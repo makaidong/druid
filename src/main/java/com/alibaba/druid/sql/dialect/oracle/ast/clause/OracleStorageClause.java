@@ -150,6 +150,4 @@ public class OracleStorageClause extends OracleSQLObjectImpl {
     public static enum FlashCacheType {
         KEEP, NONE, DEFAULT
     }
-
-
 }

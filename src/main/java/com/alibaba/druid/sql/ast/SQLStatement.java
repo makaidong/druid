@@ -17,8 +17,4 @@ package com.alibaba.druid.sql.ast;
 
 public interface SQLStatement extends SQLObject {
     String getDbType();
-
-    boolean isAfterSemi();
-
-    void setAfterSemi(boolean afterSemi);
 }

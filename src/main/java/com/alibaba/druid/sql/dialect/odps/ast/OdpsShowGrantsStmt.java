@@ -21,7 +21,7 @@ import com.alibaba.druid.sql.ast.SQLStatementImpl;
 import com.alibaba.druid.sql.dialect.odps.visitor.OdpsASTVisitor;
 import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 
-public class OdpsShowGrantsStmt extends SQLStatementImpl {
+public class OdpsShowGrantsStmt extends SQLStatementImpl implements SQLStatement {
 
     private SQLExpr user;
 

@@ -242,7 +242,7 @@ public class SQLUtils {
 
     public static String format(String sql, String dbType, List<Object> parameters, FormatOption option) {
         try {
-            SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, dbType, true);
+            SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, dbType);
             parser.setKeepComments(true);
 
             List<SQLStatement> statementList = parser.parseStatementList();
@@ -292,15 +292,11 @@ public class SQLUtils {
             visitor.setTableMapping(tableMapping);
         }
 
-        boolean printStmtSeperator = !JdbcConstants.ORACLE.equals(dbType);
-
-        for (int i = 0, size = statementList.size(); i < size; i++) {
+        for (int i = 0; i < statementList.size(); i++) {
             SQLStatement stmt = statementList.get(i);
 
             if (i > 0) {
-                if (printStmtSeperator) {
-                    visitor.print(";");
-                }
+                visitor.print(";");
 
                 SQLStatement preStmt = statementList.get(i - 1);
                 List<String> comments = preStmt.getAfterCommentsDirect();
@@ -313,10 +309,7 @@ public class SQLUtils {
                         visitor.print(comment);
                     }
                 }
-
-                if (printStmtSeperator) {
-                    visitor.println();
-                }
+                visitor.println();
 
                 if (!(stmt instanceof SQLSetStatement)) {
                     visitor.println();
@@ -332,9 +325,12 @@ public class SQLUtils {
             }
             stmt.accept(visitor);
 
-            if (i == size - 1) {
+            if (i == statementList.size() - 1) {
                 Boolean semi = (Boolean) stmt.getAttribute("format.semi");
-                if (semi != null && semi.booleanValue() && printStmtSeperator) {
+                if (semi != null && semi.booleanValue()) {
+//                    if (stmt.hasAfterComment()) {
+//                        visitor.println();
+//                    }
                     visitor.print(";");
                 }
 
@@ -431,15 +427,6 @@ public class SQLUtils {
 
     public static List<SQLStatement> parseStatements(String sql, String dbType) {
         SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, dbType);
-        List<SQLStatement> stmtList = parser.parseStatementList();
-        if (parser.getLexer().token() != Token.EOF) {
-            throw new DruidRuntimeException("syntax error : " + sql);
-        }
-        return stmtList;
-    }
-
-    public static List<SQLStatement> parseStatements(String sql, String dbType, boolean keepComments) {
-        SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, dbType, keepComments);
         List<SQLStatement> stmtList = parser.parseStatementList();
         if (parser.getLexer().token() != Token.EOF) {
             throw new DruidRuntimeException("syntax error : " + sql);

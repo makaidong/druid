@@ -100,8 +100,4 @@ public class SQLIdentifierExpr extends SQLExprImpl implements SQLName {
     public String toString() {
         return this.name;
     }
-
-    public SQLIdentifierExpr clone() {
-        return new SQLIdentifierExpr(this.name);
-    }
 }

@@ -28,8 +28,6 @@ public class SQLInsertStatement extends SQLInsertInto implements SQLStatement {
 
     protected boolean upsert = false; // for phoenix
 
-    private boolean afterSemi;
-
     public SQLInsertStatement(){
 
     }
@@ -106,15 +104,5 @@ public class SQLInsertStatement extends SQLInsertInto implements SQLStatement {
     
     public void setDbType(String dbType) {
         this.dbType = dbType;
-    }
-
-    @Override
-    public boolean isAfterSemi() {
-        return afterSemi;
-    }
-
-    @Override
-    public void setAfterSemi(boolean afterSemi) {
-        this.afterSemi = afterSemi;
     }
 }

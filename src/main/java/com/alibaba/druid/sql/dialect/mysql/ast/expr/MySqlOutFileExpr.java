@@ -122,8 +122,4 @@ public class MySqlOutFileExpr extends MySqlObjectImpl implements SQLExpr {
         this.ignoreLinesNumber = ignoreLinesNumber;
     }
 
-    public SQLExpr clone() {
-        throw new UnsupportedOperationException();
-    }
-
 }

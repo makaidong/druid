@@ -19,10 +19,9 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerObjectImpl;
 import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerStatement;
-import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerStatementImpl;
 import com.alibaba.druid.sql.dialect.sqlserver.visitor.SQLServerASTVisitor;
 
-public class SQLServerWaitForStatement extends SQLServerStatementImpl implements SQLServerStatement {
+public class SQLServerWaitForStatement extends SQLServerObjectImpl implements SQLServerStatement {
 
     private SQLExpr      delay;
 
@@ -32,6 +31,8 @@ public class SQLServerWaitForStatement extends SQLServerStatementImpl implements
 
     private SQLExpr      timeout;
     
+    private String       dbType;
+
     @Override
     public void accept0(SQLServerASTVisitor visitor) {
         if (visitor.visit(this)) {
@@ -73,5 +74,13 @@ public class SQLServerWaitForStatement extends SQLServerStatementImpl implements
 
     public void setTimeout(SQLExpr timeout) {
         this.timeout = timeout;
+    }
+
+    public String getDbType() {
+        return dbType;
+    }
+    
+    public void setDbType(String dbType) {
+        this.dbType = dbType;
     }
 }

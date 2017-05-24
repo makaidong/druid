@@ -31,10 +31,6 @@ public class OracleForStatement extends OracleStatementImpl {
 
     private List<SQLStatement> statements = new ArrayList<SQLStatement>();
 
-    private boolean            all;
-
-    private SQLName           endLabel;
-
     @Override
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
@@ -65,22 +61,8 @@ public class OracleForStatement extends OracleStatementImpl {
         return statements;
     }
 
-    public boolean isAll() {
-        return all;
+    public void setStatements(List<SQLStatement> statements) {
+        this.statements = statements;
     }
 
-    public void setAll(boolean all) {
-        this.all = all;
-    }
-
-    public SQLName getEndLabel() {
-        return endLabel;
-    }
-
-    public void setEndLabel(SQLName endLabel) {
-        if (endLabel != null) {
-            endLabel.setParent(this);
-        }
-        this.endLabel = endLabel;
-    }
 }

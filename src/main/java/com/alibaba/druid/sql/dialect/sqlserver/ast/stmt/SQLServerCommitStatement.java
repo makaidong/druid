@@ -18,10 +18,9 @@ package com.alibaba.druid.sql.dialect.sqlserver.ast.stmt;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerObjectImpl;
 import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerStatement;
-import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerStatementImpl;
 import com.alibaba.druid.sql.dialect.sqlserver.visitor.SQLServerASTVisitor;
 
-public class SQLServerCommitStatement extends SQLServerStatementImpl implements SQLServerStatement {
+public class SQLServerCommitStatement extends SQLServerObjectImpl implements SQLServerStatement {
 
     private boolean work = false;
 
@@ -29,6 +28,8 @@ public class SQLServerCommitStatement extends SQLServerStatementImpl implements 
 
     private SQLExpr delayedDurability;
     
+    private String  dbType;
+
     public boolean isWork() {
         return work;
     }
@@ -59,5 +60,13 @@ public class SQLServerCommitStatement extends SQLServerStatementImpl implements 
 
     public void setDelayedDurability(SQLExpr delayedDurability) {
         this.delayedDurability = delayedDurability;
+    }
+    
+    public String getDbType() {
+        return dbType;
+    }
+    
+    public void setDbType(String dbType) {
+        this.dbType = dbType;
     }
 }

@@ -58,7 +58,8 @@ public class OracleSelectTest42 extends OracleTest {
         Assert.assertEquals("SELECT ALL *" + //
                             "\nFROM t_department" + //
                             "\nWHERE name IN ('0000', '4444')" + //
-                            "\nORDER BY name ASC", text);
+                            "\nORDER BY name ASC;" + //
+                            "\n", text);
 
         // Assert.assertTrue(visitor.getColumns().contains(new TableStat.Column("acduser.vw_acd_info", "xzqh")));
 

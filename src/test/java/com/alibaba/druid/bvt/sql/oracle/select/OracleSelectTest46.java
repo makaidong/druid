@@ -63,7 +63,8 @@ public class OracleSelectTest46 extends OracleTest {
                             + "\nWHERE T1.MT_ORDER_ID = T2.MT_ORDER_ID" //
                             + "\n\tAND SELLER_SSOID = 1" //
                             + "\n\tAND T1.MT_ORDER_ID = '1'" //
-                            + "\n\tAND T1.MT_BATCH_ORDER_ID IN ('1')", text);
+                            + "\n\tAND T1.MT_BATCH_ORDER_ID IN ('1');"//
+                            + "\n", text);
 
         // Assert.assertTrue(visitor.getColumns().contains(new TableStat.Column("acduser.vw_acd_info", "xzqh")));
 

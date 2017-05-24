@@ -63,7 +63,8 @@ public class OracleSelectTest50 extends OracleTest {
                             + "\n\tWHERE rownum <= 20"//
                             + "\n\tORDER BY REG_TIME DESC"//
                             + "\n)"//
-                            + "\nWHERE num > 0", text);
+                            + "\nWHERE num > 0;"//
+                            + "\n", text);
 
         // Assert.assertTrue(visitor.getColumns().contains(new TableStat.Column("acduser.vw_acd_info", "xzqh")));
 

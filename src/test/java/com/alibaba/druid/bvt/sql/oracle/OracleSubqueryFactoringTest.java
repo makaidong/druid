@@ -54,15 +54,16 @@ public class OracleSubqueryFactoringTest extends TestCase {
                           + "\tSELECT avg\n" //
                           + "\tFROM avg_cost\n" //
                           + "\t)\n" //
-                          + "ORDER BY department_name;";
+                          + "ORDER BY department_name;\n";
 
         OracleStatementParser parser = new OracleStatementParser(sql);
         SQLSelectStatement stmt = (SQLSelectStatement) parser.parseStatementList().get(0);
 
         String text = TestUtils.outputOracle(stmt);
 
-        assertEquals(expected, text);
+        Assert.assertEquals(expected, text);
 
+        System.out.println(text);
     }
 
 }

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-<!--
+<!--	   
         <parent>
                 <groupId>com.alibaba</groupId>
                 <artifactId>parent-pom</artifactId>
@@ -10,7 +10,7 @@
  -->
 	<groupId>com.alibaba</groupId>
 	<artifactId>druid</artifactId>
-	<version>1.0.32-SNAPSHOT</version>
+	<version>1.0.30-SNAPSHOT</version>
 
 	<packaging>jar</packaging>
 	<name>druid</name>
@@ -22,7 +22,7 @@
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 
-		<gpg.skip>true</gpg.skip>
+		<gpg.skip>false</gpg.skip>
 		<javadoc.skip>false</javadoc.skip>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -408,6 +408,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>1.5.2.RELEASE</version>
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>

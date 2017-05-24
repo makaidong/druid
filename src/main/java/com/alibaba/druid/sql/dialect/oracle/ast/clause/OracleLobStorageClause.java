@@ -20,19 +20,17 @@ import java.util.List;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLName;
-import com.alibaba.druid.sql.dialect.oracle.ast.OracleSQLObject;
 import com.alibaba.druid.sql.dialect.oracle.ast.OracleSQLObjectImpl;
-import com.alibaba.druid.sql.dialect.oracle.ast.OracleSegmentAttributesImpl;
 import com.alibaba.druid.sql.dialect.oracle.visitor.OracleASTVisitor;
-import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 
-public class OracleLobStorageClause extends OracleSegmentAttributesImpl implements OracleSQLObject {
+public class OracleLobStorageClause extends OracleSQLObjectImpl {
 
     private final List<SQLName> items      = new ArrayList<SQLName>();
 
     private boolean             secureFile = false;
     private boolean             basicFile  = false;
 
+    private SQLName             tableSpace;
 
     private Boolean             enable;
 
@@ -43,21 +41,12 @@ public class OracleLobStorageClause extends OracleSegmentAttributesImpl implemen
 
     private Boolean             compress;
     private Boolean             keepDuplicate;
-    private boolean             retention;
-
-    private OracleStorageClause storageClause;
-
-    private SQLExpr             pctversion;
-
-    protected void accept0(SQLASTVisitor visitor) {
-        this.accept0((OracleASTVisitor) visitor);
-    }
 
     @Override
     public void accept0(OracleASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, items);
-            acceptChild(visitor, tablespace);
+            acceptChild(visitor, tableSpace);
         }
         visitor.endVisit(this);
     }
@@ -98,6 +87,14 @@ public class OracleLobStorageClause extends OracleSegmentAttributesImpl implemen
         this.basicFile = basicFile;
     }
 
+    public SQLName getTableSpace() {
+        return tableSpace;
+    }
+
+    public void setTableSpace(SQLName tableSpace) {
+        this.tableSpace = tableSpace;
+    }
+
     public Boolean getCache() {
         return cache;
     }
@@ -130,33 +127,4 @@ public class OracleLobStorageClause extends OracleSegmentAttributesImpl implemen
         this.keepDuplicate = keepDuplicate;
     }
 
-    public boolean isRetention() {
-        return retention;
-    }
-
-    public void setRetention(boolean retention) {
-        this.retention = retention;
-    }
-
-    public OracleStorageClause getStorageClause() {
-        return storageClause;
-    }
-
-    public void setStorageClause(OracleStorageClause storageClause) {
-        if (storageClause != null) {
-            storageClause.setParent(this);
-        }
-        this.storageClause = storageClause;
-    }
-
-    public SQLExpr getPctversion() {
-        return pctversion;
-    }
-
-    public void setPctversion(SQLExpr pctversion) {
-        if (pctversion != null) {
-            pctversion.setParent(this);
-        }
-        this.pctversion = pctversion;
-    }
 }

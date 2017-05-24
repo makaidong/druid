@@ -322,12 +322,6 @@ public class PGSQLStatementParser extends SQLStatementParser {
             stmt.setWith(with);
             return stmt;
         }
-
-        if (lexer.token() == Token.UPDATE) {
-            PGUpdateStatement stmt = (PGUpdateStatement) this.parseUpdateStatement();
-            stmt.setWith(with);
-            return stmt;
-        }
         throw new ParserException("TODO");
     }
 

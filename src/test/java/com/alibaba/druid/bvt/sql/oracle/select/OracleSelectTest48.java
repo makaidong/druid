@@ -63,7 +63,8 @@ public class OracleSelectTest48 extends OracleTest {
                             + "\nSELECT synonym_name" //
                             + "\nFROM all_synonyms us, all_sequences asq" //
                             + "\nWHERE asq.sequence_name = us.table_name" //
-                            + "\n\tAND asq.sequence_owner = us.table_owner", text);
+                            + "\n\tAND asq.sequence_owner = us.table_owner;" //
+                            + "\n", text);
 
         // Assert.assertTrue(visitor.getColumns().contains(new TableStat.Column("acduser.vw_acd_info", "xzqh")));
 

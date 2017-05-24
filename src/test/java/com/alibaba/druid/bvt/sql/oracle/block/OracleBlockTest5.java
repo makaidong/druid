@@ -17,8 +17,6 @@ package com.alibaba.druid.bvt.sql.oracle.block;
 
 import java.util.List;
 
-import com.alibaba.druid.sql.SQLUtils;
-import com.alibaba.druid.util.JdbcConstants;
 import org.junit.Assert;
 
 import com.alibaba.druid.sql.OracleTest;
@@ -48,14 +46,13 @@ public class OracleBlockTest5 extends OracleTest {
 
         OracleStatementParser parser = new OracleStatementParser(sql);
         List<SQLStatement> statementList = parser.parseStatementList();
-        SQLStatement stmt = statementList.get(0);
-        String output = SQLUtils.toSQLString(stmt, JdbcConstants.ORACLE);
-        System.out.println(output);
+        SQLStatement statemen = statementList.get(0);
+        print(statementList);
 
-        assertEquals(1, statementList.size());
+        Assert.assertEquals(1, statementList.size());
 
         OracleSchemaStatVisitor visitor = new OracleSchemaStatVisitor();
-        stmt.accept(visitor);
+        statemen.accept(visitor);
 
         System.out.println("Tables : " + visitor.getTables());
         System.out.println("fields : " + visitor.getColumns());

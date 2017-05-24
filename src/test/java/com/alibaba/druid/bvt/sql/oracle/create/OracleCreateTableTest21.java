@@ -44,15 +44,12 @@ public class OracleCreateTableTest21 extends OracleTest {
 
         Assert.assertEquals(1, statementList.size());
 
-        Assert.assertEquals("CREATE TABLE divisions (\n" +
-                        "\tdiv_no NUMBER(2),\n" +
-                        "\tdiv_name VARCHAR2(14),\n" +
-                        "\tlocation VARCHAR2(13)\n" +
-                        ")\n" +
-                        "STORAGE (\n" +
-                        "\tINITIAL 8M\n" +
-                        "\tMAXSIZE 1G\n" +
-                        ");",//
+        Assert.assertEquals("CREATE TABLE divisions ("//
+                            + "\n\tdiv_no NUMBER(2),"//
+                            + "\n\tdiv_name VARCHAR2(14),"//
+                            + "\n\tlocation VARCHAR2(13)"//
+                            + "\n)"//
+                            + "\nSTORAGE (INITIAL 8M MAXSIZE 1G)",//
                             SQLUtils.toSQLString(statement, JdbcConstants.ORACLE));
 
         OracleSchemaStatVisitor visitor = new OracleSchemaStatVisitor();

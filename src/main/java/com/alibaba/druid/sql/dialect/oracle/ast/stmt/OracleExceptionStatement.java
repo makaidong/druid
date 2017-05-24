@@ -56,11 +56,8 @@ public class OracleExceptionStatement extends OracleStatementImpl implements Ora
             return statements;
         }
 
-        public void setStatement(SQLStatement statement) {
-            if (statement != null) {
-                statement.setParent(this);
-                this.statements.add(statement);
-            }
+        public void setStatements(List<SQLStatement> statements) {
+            this.statements = statements;
         }
 
         @Override

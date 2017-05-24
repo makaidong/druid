@@ -17,34 +17,28 @@ package com.alibaba.druid.sql.dialect.oracle.ast.stmt;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLName;
-import com.alibaba.druid.sql.ast.SQLPartition;
-import com.alibaba.druid.sql.dialect.oracle.ast.OracleSQLObject;
 import com.alibaba.druid.sql.dialect.oracle.ast.OracleSQLObjectImpl;
-import com.alibaba.druid.sql.dialect.oracle.ast.OracleSegmentAttributesImpl;
 import com.alibaba.druid.sql.dialect.oracle.ast.clause.OracleStorageClause;
 import com.alibaba.druid.sql.dialect.oracle.visitor.OracleASTVisitor;
-import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OracleUsingIndexClause extends OracleSegmentAttributesImpl implements OracleSQLObject {
+public class OracleUsingIndexClause extends OracleSQLObjectImpl {
 
     private SQLName             index;
+    private SQLName             tablespace;
+
+    private SQLExpr             ptcfree;
+    private SQLExpr             pctused;
+    private SQLExpr             initrans;
+    private SQLExpr             maxtrans;
 
     private Boolean             enable            = null;
 
     private boolean             computeStatistics = false;
-    private boolean             reverse;
 
-    private List<SQLPartition> localPartitionIndex = new ArrayList<SQLPartition>();
+    private OracleStorageClause storage;
 
     public OracleUsingIndexClause(){
 
-    }
-
-    protected void accept0(SQLASTVisitor visitor) {
-        accept0((OracleASTVisitor) visitor);
     }
 
     @Override
@@ -55,6 +49,14 @@ public class OracleUsingIndexClause extends OracleSegmentAttributesImpl implemen
             acceptChild(visitor, storage);
         }
         visitor.endVisit(this);
+    }
+
+    public OracleStorageClause getStorage() {
+        return storage;
+    }
+
+    public void setStorage(OracleStorageClause storage) {
+        this.storage = storage;
     }
 
     public Boolean getEnable() {
@@ -81,15 +83,44 @@ public class OracleUsingIndexClause extends OracleSegmentAttributesImpl implemen
         this.index = index;
     }
 
-    public boolean isReverse() {
-        return reverse;
+    public SQLName getTablespace() {
+        return tablespace;
     }
 
-    public void setReverse(boolean reverse) {
-        this.reverse = reverse;
+    public void setTablespace(SQLName tablespace) {
+        this.tablespace = tablespace;
     }
 
-    public List<SQLPartition> getLocalPartitionIndex() {
-        return localPartitionIndex;
+    public SQLExpr getPtcfree() {
+        return ptcfree;
     }
+
+    public void setPtcfree(SQLExpr ptcfree) {
+        this.ptcfree = ptcfree;
+    }
+
+    public SQLExpr getPctused() {
+        return pctused;
+    }
+
+    public void setPctused(SQLExpr pctused) {
+        this.pctused = pctused;
+    }
+
+    public SQLExpr getInitrans() {
+        return initrans;
+    }
+
+    public void setInitrans(SQLExpr initrans) {
+        this.initrans = initrans;
+    }
+
+    public SQLExpr getMaxtrans() {
+        return maxtrans;
+    }
+
+    public void setMaxtrans(SQLExpr maxtrans) {
+        this.maxtrans = maxtrans;
+    }
+
 }

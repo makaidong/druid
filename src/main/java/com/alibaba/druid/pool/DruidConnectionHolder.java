@@ -145,10 +145,7 @@ public final class DruidConnectionHolder {
             this.underlyingTransactionIsolation = conn.getTransactionIsolation();
         } catch (SQLException e) {
             // compartible for alibaba corba
-            if ("HY000".equals(e.getSQLState())
-                    || "com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException".equals(e.getClass().getName())) {
-                // skip
-            } else {
+            if (!"HY000".equals(e.getSQLState())) {
                 throw e;
             }
         }

@@ -50,11 +50,4 @@ public class SQLCheck extends SQLConstraintImpl implements SQLTableElement {
         visitor.endVisit(this);
     }
 
-    public void cloneTo(SQLCheck x) {
-        super.cloneTo(x);
-
-        if (expr != null) {
-            expr = expr.clone();
-        }
-    }
 }

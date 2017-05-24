@@ -72,9 +72,6 @@ public class SQLIfStatement extends SQLStatementImpl {
     }
 
     public void setElseItem(Else elseItem) {
-        if (elseItem != null) {
-            elseItem.setParent(this);
-        }
         this.elseItem = elseItem;
     }
 

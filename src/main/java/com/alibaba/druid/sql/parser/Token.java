@@ -95,8 +95,7 @@ public enum Token {
     CASE("CASE"), 
     WHEN("WHEN"), 
     THEN("THEN"), 
-    ELSE("ELSE"),
-    ELSIF("ELSIF"),
+    ELSE("ELSE"), 
     END("END"), 
     EXISTS("EXISTS"), 
     IN("IN"),
@@ -115,8 +114,6 @@ public enum Token {
     SOME("SOME"), 
     ANY("ANY"),
     TRUNCATE("TRUNCATE"),
-
-    RETURN("RETURN"),
 
     // mysql
     TRUE("TRUE"), 
@@ -222,6 +219,7 @@ public enum Token {
     PCTINCREASE("PCTINCREASE"),
     FLASH_CACHE("FLASH_CACHE"),
     CELL_FLASH_CACHE("CELL_FLASH_CACHE"),
+    KEEP("KEEP"),
     NONE("NONE"),
     LOB("LOB"),
     STORE("STORE"),
